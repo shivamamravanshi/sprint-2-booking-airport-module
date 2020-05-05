@@ -2,6 +2,7 @@ package com.capg.flightmanagement.bookingms.controller;
 
 import com.capg.flightmanagement.bookingms.dto.*;
 import com.capg.flightmanagement.bookingms.entities.Booking;
+import com.capg.flightmanagement.bookingms.exceptions.BookingFullException;
 import com.capg.flightmanagement.bookingms.exceptions.BookingNotFoundException;
 import com.capg.flightmanagement.bookingms.exceptions.InvalidBookingIdException;
 import com.capg.flightmanagement.bookingms.services.IBookingService;
@@ -34,7 +35,7 @@ public class BookingRestController {
     private String userServiceBaseUrl;
 
     @Value("${userFlightScheduleService.baseUrl")
-    private String userFlightScheduleServiceBaseUrl;
+    private String flightScheduleServiceBaseUrl;
 
     @PostMapping("/newBooking")
     public ResponseEntity<BookingResponseDto> createBooking(@RequestBody BookingDto bookingDto){
@@ -50,9 +51,15 @@ public class BookingRestController {
         booking.setPassengersUIDList(passengerUINList);
         booking.setNoOfPassenger(passengerUINList.size());
         booking = bookingService.addBooking(booking);
+        acknowledgeBooking(booking);
 
         ResponseEntity<BookingResponseDto> response = new ResponseEntity<>(responseDto,HttpStatus.OK);
         return response;
+    }
+
+    private void acknowledgeBooking(Booking booking){
+        String url = flightScheduleServiceBaseUrl+"/booked";
+        restTemplate.put(url,booking);
     }
 
     private List<BigInteger> passengerUINList(BookingDto bookingDto){
@@ -74,6 +81,11 @@ public class BookingRestController {
         //schedule
         FlightScheduleDto flightScheduleDto = getScheduleFlightDetails(bookingDto.getFlightNumber());
 
+        if(bookingDto.getPassengerList().size()>flightScheduleDto.getAvailableSeat())
+        {
+            throw new BookingFullException("Booking is full for flight Number "+bookingDto.getFlightNumber()+"for Date "+bookingDto.getBookingDate());
+        }
+
         bookingResponseDto.setArrivalTime(flightScheduleDto.getArrivalTime());
         bookingResponseDto.setDepartureTime(flightScheduleDto.getDepartureTime());
         //userDetails
@@ -86,7 +98,7 @@ public class BookingRestController {
     }
 
     private FlightScheduleDto getScheduleFlightDetails(BigInteger flightNumber){
-        String url = userFlightScheduleServiceBaseUrl +"/get/"+flightNumber;
+        String url = flightScheduleServiceBaseUrl +"/get/"+flightNumber;
         FlightScheduleDto  flightScheduleDto = restTemplate.getForObject(url,FlightScheduleDto.class);
         return flightScheduleDto;
     }
