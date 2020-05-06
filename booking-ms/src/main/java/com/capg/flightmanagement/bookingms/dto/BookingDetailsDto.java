@@ -5,6 +5,11 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
+/***
+ * @author Shivam Amravanshi
+ *
+ * This class is use to transfer the booking details
+ */
 public class BookingDetailsDto {
     //flight Details
     private BigInteger flightNumber;

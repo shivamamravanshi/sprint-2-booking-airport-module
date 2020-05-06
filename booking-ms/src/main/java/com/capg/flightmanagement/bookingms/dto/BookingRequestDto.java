@@ -5,6 +5,11 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
+/***
+ * @author Shivam Amravanshi
+ *
+ * This class is use to transfer the booking details
+ */
 public class BookingRequestDto {
     //booking & passenger Detail
     private BigInteger userId;

@@ -7,6 +7,11 @@ import java.time.LocalDate;
 import java.util.Random;
 import java.util.UUID;
 
+/***
+ * @author Shivam Amravanshi
+ *
+ * This class is use to transfer the Passenger Details
+ */
 public class PassengerDetailsDto {
     private BigInteger pnrNumber;
     private String passengerName;

@@ -26,6 +26,9 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/bookings")
+/***
+ * @author Shivam Amravanshi
+ */
 public class BookingRestController {
     @Autowired
     private IBookingService bookingService;
@@ -44,6 +47,12 @@ public class BookingRestController {
     @Value("${passengerService.baseUrl")
     private String passengerServiceBaseUrl;
 */
+
+    /***
+     * create Booking if new req
+     * @param bookingRequestDto
+     * @return
+     */
     @PostMapping("/new")
     public ResponseEntity<BookingDetailsDto> createBookingRequest(@RequestBody BookingRequestDto bookingRequestDto){
         BookingDetailsDto bookingDetailsDto = convertToResponseDto(bookingRequestDto);
@@ -69,6 +78,10 @@ public class BookingRestController {
         return response;
     }
 
+    /***
+     * this method will send the acknowledge to flightSchedule along with booking object
+     * @param booking
+     */
     private void acknowledgeBooking(Booking booking){
 /*
         String url = flightScheduleServiceBaseUrl+"/booked";
@@ -76,6 +89,10 @@ public class BookingRestController {
 */
     }
 
+    /***
+     * this method will send the list of passengers to Passenger service to store passengers Details to database
+     * @param passengerDetailsDtoList
+     */
     private void requestPassengerStore(List<PassengerDetailsDto> passengerDetailsDtoList){
 /*
         String url = passengerServiceBaseUrl+"/store";
@@ -83,6 +100,11 @@ public class BookingRestController {
 */
     }
 
+    /***
+     *
+     * @param bookingRequestDto
+     * @return the list of passengers unique Identification Number
+     */
     private List<BigInteger> passengerUINList(BookingRequestDto bookingRequestDto){
         List<BigInteger> passengerUINList = new ArrayList<>();
         List<PassengerDetailsDto> passengerList = bookingRequestDto.getPassengerList();
@@ -92,6 +114,11 @@ public class BookingRestController {
         return passengerUINList;
     }
 
+    /***
+     * convert the booking request to booking details
+     * @param bookingRequestDto
+     * @return
+     */
     private BookingDetailsDto convertToResponseDto(BookingRequestDto bookingRequestDto){
         BookingDetailsDto bookingDetailsDto = new BookingDetailsDto();
         bookingDetailsDto.setPassengerList(bookingRequestDto.getPassengerList());
@@ -120,6 +147,11 @@ public class BookingRestController {
         return bookingDetailsDto;
     }
 
+    /***
+     * fetch the schedule information by flightNumber
+     * @param flightNumber
+     * @return
+     */
     private FlightScheduleDto getScheduleFlightDetails(BigInteger flightNumber){
 /*
         //Integrated
@@ -138,6 +170,11 @@ public class BookingRestController {
         return flightScheduleDto;
     }
 
+    /***
+     * fetch the user Details by unique user Id
+     * @param userId
+     * @return
+     */
     private UserDetailsDto fetchUserById(BigInteger userId) {
 /*
         //Integrated
@@ -155,6 +192,11 @@ public class BookingRestController {
     }
 
 
+    /***
+     * fetch the booking details from database and send response with booking details
+     * @param bookingId
+     * @return
+     */
     @GetMapping("/get/{bookingId}")
     public ResponseEntity<Booking> getBookingById(@PathVariable("bookingId") BigInteger bookingId) {
         Booking booking = bookingService.viewBooking(bookingId);
@@ -162,6 +204,10 @@ public class BookingRestController {
         return response;
     }
 
+    /***
+     * fetch all bookings from database
+     * @return Booking List as response
+     */
     @GetMapping
     public ResponseEntity<List<Booking>> fetchAllBookings() {
         List<Booking> bookings = bookingService.viewAllBooking();
@@ -169,6 +215,11 @@ public class BookingRestController {
         return response;
     }
 
+    /***
+     * delete booking if exist
+     * @param bookingId
+     * @return response as true or false
+     */
     @DeleteMapping("/delete/{bookingId}")
     public ResponseEntity<Boolean> deleteBookingById(@PathVariable("bookingId") BigInteger bookingId) {
         Booking booking = bookingService.viewBooking(bookingId);
@@ -184,6 +235,10 @@ public class BookingRestController {
         return response;
     }
 
+    /***
+     * send acknowledge to flight Scheduler to cancel booking
+     * @param booking
+     */
     private void acknowledgeCancelBooking(Booking booking){
 /*
         String url = flightScheduleServiceBaseUrl+"/canceled";
@@ -191,6 +246,10 @@ public class BookingRestController {
 */
     }
 
+    /***
+     * send req to Passenger service for cancel booking
+     * @param passengerUINList
+     */
     private void cancelRequestPassengerStore(List<BigInteger> passengerUINList){
 /*
         String url = passengerServiceBaseUrl+"/canceled";
@@ -198,6 +257,11 @@ public class BookingRestController {
 */
     }
 
+    /***
+     * Handle Invalid Booking Id Exception
+     * @param ex
+     * @return
+     */
     @ExceptionHandler(InvalidBookingIdException.class)
     public ResponseEntity<String>handleEmployeeNotFound(InvalidBookingIdException ex){
         Log.error("Invalid Booking Id exception",ex);
@@ -206,6 +270,11 @@ public class BookingRestController {
         return response;
     }
 
+    /***
+     * Handel Booking Not found Exception
+     * @param ex
+     * @return
+     */
     @ExceptionHandler(BookingNotFoundException.class)
     public ResponseEntity<String>handleEmployeeNotFound(BookingNotFoundException ex){
         Log.error("Booking not found exception",ex);
@@ -214,6 +283,11 @@ public class BookingRestController {
         return response;
     }
 
+    /**
+     * this method will run when ConstraintViolationException occur
+     * @param ex
+     * @return
+     */
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<String> handleConstraintViolate(ConstraintViolationException ex) {
         Log.error("constraint violation", ex);
@@ -222,6 +296,11 @@ public class BookingRestController {
         return response;
     }
 
+    /**
+     * Blanket Exception Handler
+     * @param ex
+     * @return
+     */
     @ExceptionHandler(Throwable.class)
     public ResponseEntity<String> handleAll(Throwable ex) {
         Log.error("Something went wrong", ex);

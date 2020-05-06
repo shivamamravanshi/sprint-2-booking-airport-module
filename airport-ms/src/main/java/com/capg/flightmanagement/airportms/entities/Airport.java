@@ -4,6 +4,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/***
+ * @author Shivam Amravanshi
+ */
 @Entity
 @Table(name = "airports")
 public class Airport {

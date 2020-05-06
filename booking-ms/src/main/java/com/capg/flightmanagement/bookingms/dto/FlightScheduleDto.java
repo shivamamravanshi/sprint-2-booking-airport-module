@@ -1,9 +1,12 @@
 package com.capg.flightmanagement.bookingms.dto;
 
 import java.math.BigInteger;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
+/***
+ * @author Shivam Amravanshi
+ *
+ * This class is use to transfer the Flight Schedule information
+ */
 public class FlightScheduleDto {
     private BigInteger flightNumber;
     private int availableSeat;

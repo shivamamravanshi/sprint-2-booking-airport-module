@@ -7,6 +7,9 @@ import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 
+/***
+ * @author Shivam Amravanshi
+ */
 @Entity
 @Table(name = "bookings")
 public class Booking {

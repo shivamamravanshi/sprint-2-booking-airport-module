@@ -2,6 +2,11 @@ package com.capg.flightmanagement.bookingms.dto;
 
 import java.math.BigInteger;
 
+/***
+ * @author Shivam Amravanshi
+ *
+ * This class is use to transfer the User Details
+ */
 public class UserDetailsDto {
     private BigInteger userId;
     private String userName;
