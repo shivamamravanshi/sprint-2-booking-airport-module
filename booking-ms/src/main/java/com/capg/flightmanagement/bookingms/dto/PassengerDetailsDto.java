@@ -3,6 +3,9 @@ package com.capg.flightmanagement.bookingms.dto;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.util.Random;
+import java.util.UUID;
 
 public class PassengerDetailsDto {
     private BigInteger pnrNumber;
@@ -10,6 +13,20 @@ public class PassengerDetailsDto {
     private Integer passengerAge;
     private BigInteger passengerUIN;
     private String gender;
+
+    private static Long generatedNumber = 1000000000L;
+    public PassengerDetailsDto(){
+        this.pnrNumber = generateValue();
+    }
+
+    /***
+     * Generate Unique PNR Number
+     * @return PNR number as BigInteger
+     */
+    private static BigInteger generateValue(){
+        String generatedValue = ++generatedNumber+"";
+        return new BigInteger(generatedValue);
+    }
 
     public String getGender() {
         return gender;
@@ -23,7 +40,6 @@ public class PassengerDetailsDto {
         return pnrNumber;
     }
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public void setPnrNumber(BigInteger pnrNumber) {
         this.pnrNumber = pnrNumber;
     }

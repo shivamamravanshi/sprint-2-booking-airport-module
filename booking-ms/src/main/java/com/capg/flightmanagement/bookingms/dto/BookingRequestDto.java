@@ -1,10 +1,11 @@
 package com.capg.flightmanagement.bookingms.dto;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
-public class BookingDto {
+public class BookingRequestDto {
     //booking & passenger Detail
     private BigInteger userId;
 
@@ -15,7 +16,7 @@ public class BookingDto {
     private String billingAddress;
 
     //source & destination
-    private Date bookingDate;
+    private String bookingDate;
     private String source;
     private String destination;
 
@@ -51,11 +52,11 @@ public class BookingDto {
         this.userId = userId;
     }
 
-    public Date getBookingDate() {
+    public String  getBookingDate() {
         return bookingDate;
     }
 
-    public void setBookingDate(Date bookingDate) {
+    public void setBookingDate(String  bookingDate) {
         this.bookingDate = bookingDate;
     }
 

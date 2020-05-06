@@ -17,6 +17,10 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.validation.ConstraintViolationException;
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,113 +34,126 @@ public class BookingRestController {
 
     @Autowired
     RestTemplate restTemplate;
-
+/*
     @Value("${userService.baseUrl}")
     private String userServiceBaseUrl;
 
-    @Value("${userFlightScheduleService.baseUrl")
+    @Value("${flightScheduleService.baseUrl")
     private String flightScheduleServiceBaseUrl;
 
-    @PostMapping("/newBooking")
-    public ResponseEntity<BookingResponseDto> createBooking(@RequestBody BookingDto bookingDto){
-        BookingResponseDto responseDto = convertToResponseDto(bookingDto);
+    @Value("${passengerService.baseUrl")
+    private String passengerServiceBaseUrl;
+*/
+    @PostMapping("/new")
+    public ResponseEntity<BookingDetailsDto> createBookingRequest(@RequestBody BookingRequestDto bookingRequestDto){
+        BookingDetailsDto bookingDetailsDto = convertToResponseDto(bookingRequestDto);
         Booking booking = new Booking();
-        booking.setBookingDate(bookingDto.getBookingDate());
-        booking.setFlightNumber(bookingDto.getFlightNumber());
-        booking.setTicketCost(12000);
-        booking.setUserId(responseDto.getUserId());
 
-        List<BigInteger> passengerUINList = passengerUINList(bookingDto);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+        LocalDate bookingDate = LocalDate.parse(bookingRequestDto.getBookingDate(),formatter);
 
-        booking.setPassengersUIDList(passengerUINList);
+        booking.setBookingDate(bookingDate);
+        booking.setFlightNumber(bookingRequestDto.getFlightNumber());
+        booking.setTicketCost(bookingRequestDto.getTicketCost());
+        booking.setUserId(bookingDetailsDto.getUserId());
+
+        List<BigInteger> passengerUINList = passengerUINList(bookingRequestDto);
+
+        booking.setPassengersUINList(passengerUINList);
         booking.setNoOfPassenger(passengerUINList.size());
         booking = bookingService.addBooking(booking);
         acknowledgeBooking(booking);
+        requestPassengerStore(bookingDetailsDto.getPassengerList());
 
-        ResponseEntity<BookingResponseDto> response = new ResponseEntity<>(responseDto,HttpStatus.OK);
+        ResponseEntity<BookingDetailsDto> response = new ResponseEntity<>(bookingDetailsDto,HttpStatus.OK);
         return response;
     }
 
     private void acknowledgeBooking(Booking booking){
+/*
         String url = flightScheduleServiceBaseUrl+"/booked";
         restTemplate.put(url,booking);
+*/
     }
 
-    private List<BigInteger> passengerUINList(BookingDto bookingDto){
+    private void requestPassengerStore(List<PassengerDetailsDto> passengerDetailsDtoList){
+/*
+        String url = passengerServiceBaseUrl+"/store";
+        restTemplate.put(url,passengerDetailsDtoList);
+*/
+    }
+
+    private List<BigInteger> passengerUINList(BookingRequestDto bookingRequestDto){
         List<BigInteger> passengerUINList = new ArrayList<>();
-        List<PassengerDetailsDto> passengerList = bookingDto.getPassengerList();
+        List<PassengerDetailsDto> passengerList = bookingRequestDto.getPassengerList();
         for (PassengerDetailsDto passenger: passengerList) {
             passengerUINList.add(passenger.getPassengerUIN());
         }
         return passengerUINList;
     }
 
-    private BookingResponseDto convertToResponseDto(BookingDto bookingDto){
-        BookingResponseDto bookingResponseDto = new BookingResponseDto();
-        bookingResponseDto.setPassengerList(bookingDto.getPassengerList());
-        bookingResponseDto.setFlightNumber(bookingDto.getFlightNumber());
-        bookingResponseDto.setSource(bookingDto.getSource());
-        bookingResponseDto.setDestination(bookingDto.getDestination());
-        bookingResponseDto.setBillingAddress(bookingDto.getBillingAddress());
+    private BookingDetailsDto convertToResponseDto(BookingRequestDto bookingRequestDto){
+        BookingDetailsDto bookingDetailsDto = new BookingDetailsDto();
+        bookingDetailsDto.setPassengerList(bookingRequestDto.getPassengerList());
+        bookingDetailsDto.setFlightNumber(bookingRequestDto.getFlightNumber());
+        bookingDetailsDto.setSource(bookingRequestDto.getSource());
+        bookingDetailsDto.setDestination(bookingRequestDto.getDestination());
+        bookingDetailsDto.setBillingAddress(bookingRequestDto.getBillingAddress());
         //schedule
-        FlightScheduleDto flightScheduleDto = getScheduleFlightDetails(bookingDto.getFlightNumber());
+        FlightScheduleDto flightScheduleDto = getScheduleFlightDetails(bookingRequestDto.getFlightNumber());
 
-        if(bookingDto.getPassengerList().size()>flightScheduleDto.getAvailableSeat())
+        if(bookingRequestDto.getPassengerList().size()>flightScheduleDto.getAvailableSeat())
         {
-            throw new BookingFullException("Booking is full for flight Number "+bookingDto.getFlightNumber()+"for Date "+bookingDto.getBookingDate());
+            throw new BookingFullException("Booking is full for flight Number "+bookingRequestDto.getFlightNumber()+"for Date "+bookingRequestDto.getBookingDate());
         }
 
-        bookingResponseDto.setArrivalTime(flightScheduleDto.getArrivalTime());
-        bookingResponseDto.setDepartureTime(flightScheduleDto.getDepartureTime());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MM-yyyy");
+
+        bookingDetailsDto.setArrivalTime(flightScheduleDto.getArrivalTime());
+        bookingDetailsDto.setDepartureTime(flightScheduleDto.getDepartureTime());
         //userDetails
-        UserDetailsDto userDetailsDto = fetchUserById(bookingDto.getUserId());
+        UserDetailsDto userDetailsDto = fetchUserById(bookingRequestDto.getUserId());
 
-        bookingResponseDto.setUserId(userDetailsDto.getUserId());
-        bookingResponseDto.setUserPhone(userDetailsDto.getUserPhone());
+        bookingDetailsDto.setUserId(userDetailsDto.getUserId());
+        bookingDetailsDto.setUserPhone(userDetailsDto.getUserPhone());
 
-        return bookingResponseDto;
+        return bookingDetailsDto;
     }
 
     private FlightScheduleDto getScheduleFlightDetails(BigInteger flightNumber){
+/*
+        //Integrated
         String url = flightScheduleServiceBaseUrl +"/get/"+flightNumber;
         FlightScheduleDto  flightScheduleDto = restTemplate.getForObject(url,FlightScheduleDto.class);
         return flightScheduleDto;
+*/
+        //Isolation
+        FlightScheduleDto flightScheduleDto = new FlightScheduleDto();
+        flightScheduleDto.setAvailableSeat(10);
+        flightScheduleDto.setFlightNumber(new BigInteger("1111"));
+        flightScheduleDto.setArrivalTime("20:30");
+        flightScheduleDto.setDepartureTime("21:30");
+        //flightScheduleDto.setArrivalTime(LocalTime.of(20,30));
+        //flightScheduleDto.setDepartureTime(LocalTime.of(21,00));
+        return flightScheduleDto;
     }
 
-    /*@PostMapping("/addBooking/{userId}")
-    public ResponseEntity<Booking> createBooking(@RequestBody List<BookPassengerDto> bookPassengerDtos,
-                                                 @PathVariable("userId") BigInteger userId,
-                                                 @RequestBody BookingScheduleDetailsDto bookingScheduleDetailsDto) {
-        UserDetailsDto userDto = fetchUserById(userId);
-        Booking booking = convertBookPassengerDto(bookPassengerDtos);
-        booking.setUserId(userDto.getUserId());
-        booking.setTicketCost(12000);
-        booking.setFlightNumber(bookingScheduleDetailsDto.getFlightNumber());
-        booking.setBookingDate(bookingScheduleDetailsDto.getBookingDate());
-
-        ResponseEntity<Booking> response = new ResponseEntity<>(booking,HttpStatus.OK);
-        return response;
-    }*/
-
-
     private UserDetailsDto fetchUserById(BigInteger userId) {
+/*
+        //Integrated
         String url = userServiceBaseUrl + "/get/" + userId;
         UserDetailsDto userDto = restTemplate.getForObject(url, UserDetailsDto.class);
         return userDto;
+*/
+        //Isolation
+        UserDetailsDto userDetailsDto = new UserDetailsDto();
+        userDetailsDto.setEmail("shivam123@gmail.com");
+        userDetailsDto.setUserId(new BigInteger("100"));
+        userDetailsDto.setUserName("Shivam");
+        userDetailsDto.setUserPhone(new BigInteger("9770909000"));
+        return userDetailsDto;
     }
 
-    /*public Booking convertBookPassengerDto(List<BookPassengerDto> bookPassengerDtos) {
-        List<BigInteger> passengerUINList = new ArrayList<>();
-        int noOfPassengers = 0;
-        Booking booking = new Booking();
-        for (BookPassengerDto bookPassengerDto : bookPassengerDtos) {
-            passengerUINList.add(bookPassengerDto.getPassengerUIN());
-            noOfPassengers++;
-        }
-        booking.setPassengersUIDList(passengerUINList);
-        booking.setNoOfPassenger(noOfPassengers);
-        return booking;
-    }*/
 
     @GetMapping("/get/{bookingId}")
     public ResponseEntity<Booking> getBookingById(@PathVariable("bookingId") BigInteger bookingId) {
@@ -154,9 +171,31 @@ public class BookingRestController {
 
     @DeleteMapping("/delete/{bookingId}")
     public ResponseEntity<Boolean> deleteBookingById(@PathVariable("bookingId") BigInteger bookingId) {
-        Boolean result = bookingService.deleteBooking(bookingId);
-        ResponseEntity<Boolean> response = new ResponseEntity<>(result, HttpStatus.OK);
+        Booking booking = bookingService.viewBooking(bookingId);
+        ResponseEntity<Boolean> response;
+        if(booking != null){
+            Boolean result = bookingService.deleteBooking(bookingId);
+            response = new ResponseEntity<>(result, HttpStatus.OK);
+            acknowledgeCancelBooking(booking);
+            List<BigInteger> passengerUINList = booking.getPassengersUINList();
+            cancelRequestPassengerStore(passengerUINList);
+        }else
+            response = new ResponseEntity<>(false,HttpStatus.NO_CONTENT);
         return response;
+    }
+
+    private void acknowledgeCancelBooking(Booking booking){
+/*
+        String url = flightScheduleServiceBaseUrl+"/canceled";
+        restTemplate.put(url,booking);
+*/
+    }
+
+    private void cancelRequestPassengerStore(List<BigInteger> passengerUINList){
+/*
+        String url = passengerServiceBaseUrl+"/canceled";
+        restTemplate.put(url,passengerUINList);
+*/
     }
 
     @ExceptionHandler(InvalidBookingIdException.class)

@@ -2,12 +2,13 @@ package com.capg.flightmanagement.bookingms.dto;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class FlightScheduleDto {
     private BigInteger flightNumber;
     private int availableSeat;
-    private LocalDateTime arrivalTime;
-    private LocalDateTime departureTime;
+    private String arrivalTime;
+    private String  departureTime;
 
     public BigInteger getFlightNumber() {
         return flightNumber;
@@ -25,19 +26,19 @@ public class FlightScheduleDto {
         this.availableSeat = availableSeat;
     }
 
-    public LocalDateTime getArrivalTime() {
+    public String  getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(LocalDateTime arrivalTime) {
+    public void setArrivalTime(String arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 
-    public LocalDateTime getDepartureTime() {
+    public String getDepartureTime() {
         return departureTime;
     }
 
-    public void setDepartureTime(LocalDateTime departureTime) {
+    public void setDepartureTime(String departureTime) {
         this.departureTime = departureTime;
     }
 }

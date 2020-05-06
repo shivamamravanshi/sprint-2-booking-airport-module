@@ -2,15 +2,16 @@ package com.capg.flightmanagement.bookingms.dto;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
-public class BookingResponseDto {
+public class BookingDetailsDto {
     //flight Details
     private BigInteger flightNumber;
     private String source;
     private String destination;
-    private LocalDateTime arrivalTime;
-    private LocalDateTime departureTime;
+    private String  arrivalTime;
+    private String  departureTime;
 
     //passengers Detalis
     List<PassengerDetailsDto> passengerList;
@@ -52,19 +53,19 @@ public class BookingResponseDto {
         this.destination = destination;
     }
 
-    public LocalDateTime getArrivalTime() {
+    public String  getArrivalTime() {
         return arrivalTime;
     }
 
-    public void setArrivalTime(LocalDateTime arrivalTime) {
+    public void setArrivalTime(String  arrivalTime) {
         this.arrivalTime = arrivalTime;
     }
 
-    public LocalDateTime getDepartureTime() {
+    public String  getDepartureTime() {
         return departureTime;
     }
 
-    public void setDepartureTime(LocalDateTime departureTime) {
+    public void setDepartureTime(String departureTime) {
         this.departureTime = departureTime;
     }
 
