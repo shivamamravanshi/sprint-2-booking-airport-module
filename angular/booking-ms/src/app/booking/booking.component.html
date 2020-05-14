@@ -1,19 +1,60 @@
-<p>booking works!</p>
 
-<h3>Book Domestic and International Flights:</h3>
-<div style="margin-left: 50px; margin-top: 50ox; margin-right: 50px; margin-bottom: 50px; background-color: gray;
-         border: black;">
-<form #data="ngForm" (ngSubmit)=createBooking(data)>
-    <div style="padding-top: 20px; padding-left: 20px; padding-right: 20px; border: black;">
-        <input type="text" name="source" placeholder="Source Airport"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        <input type="text" name="destination" placeholder="Destination Airport">  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        <input type="date" name="bookingDate" placeholder="Booking Date">  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+<div class="jumbotron">
+
+<!--bookingForm is the template local variable we are asking it to hold
+    formgroup -->
+<form class="text-center border border-light p-5" #bookingForm="ngForm" (ngSubmit)=createBooking(bookingForm)>
+        <p class="h4 mb-4">Booking International and Domestic Flights:</p>
+
+    <div>  
+        <select class="browser-default custom-select mb-4" [ngModel]="srcAirport" name="source">
+            <option [ngValue]="undefined" disabled>Select airport</option>
+
+        <option *ngFor="let airport of airports" [value]="airport.airportCode" >
+            {{airport.airportName}}
+        </option>
+
+        </select>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+
+    <select class="browser-default custom-select mb-4" [ngModel]="destAirport" name="destination">
+            <option [ngValue]="undefined" disabled>Select airport</option>
+    
+            <option *ngFor="let airport of airports" [value]="airport.airportCode" >
+                {{airport.airportName}}
+            </option>
+    
+        </select>
+        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            
+     <input type="date" name="bookingDate" placeholder="Booking Date">  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
         <br>
-        <button type="submit" name="search" 
+        <button  type="submit" name="search" 
             style="margin-top:10px;" >Search</button>
     </div>
     
 </form>
 
 
+
+
+</div>
+
+<!--
+<div *ngFor="let booking of bookings">
+{{booking.userId}} {{booking.source}} {{booking.destination}}
+</div>
+-->
+
+<div class="text-center border border-light p-5" *ngIf="flagShowFlights">
+    <p class="h4 mb-4">Available Flights:</p>
+    <div  class="jumbotron" *ngFor="let flight of flights">
+        Flight Number: {{flight.flightNumber}}<br>
+        Carrier Name: {{flight.carrierName}} <br>
+        Flight Model: {{flight.flightModel}} <br>
+        Departure: {{flight.departure}} <br>
+        Arrival: {{flight.arrival}} <br>
+        Cost/Seat: {{flight.cost}} <br>
+        <button name="book">Book</button>
+    </div>
 </div>
