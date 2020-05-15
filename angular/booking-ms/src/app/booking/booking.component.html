@@ -3,8 +3,8 @@
 
 <!--bookingForm is the template local variable we are asking it to hold
     formgroup -->
-<form class="text-center border border-light p-5" #bookingForm="ngForm" (ngSubmit)=createBooking(bookingForm)>
-        <p class="h4 mb-4">Booking International and Domestic Flights:</p>
+<form class="text-center border border-light p-5" #bookingForm="ngForm" (ngSubmit)=searchFlights(bookingForm)>
+        <h1><p class="h4 mb-4">Booking International and Domestic Flights:</p></h1>
 
     <div>  
         <select class="browser-default custom-select mb-4" [ngModel]="srcAirport" name="source">
@@ -29,7 +29,7 @@
             
      <input type="date" name="bookingDate" placeholder="Booking Date">  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
         <br>
-        <button  type="submit" name="search" 
+        <button class="btn btn-success"  type="submit" name="search" 
             style="margin-top:10px;" >Search</button>
     </div>
     
@@ -54,7 +54,7 @@
         Flight Model: {{flight.flightModel}} <br>
         Departure: {{flight.departure}} <br>
         Arrival: {{flight.arrival}} <br>
-        Cost/Seat: {{flight.cost}} <br>
-        <button name="book">Book</button>
+        Cost/Seat: {{flight.seatCost}} <br>
+        <button class="btn btn-success" name="book">Book</button>
     </div>
 </div>

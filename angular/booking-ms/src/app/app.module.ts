@@ -8,12 +8,14 @@ import { AppComponent } from './app.component';
 import { BookingComponent } from './booking/booking.component';
 import { GenerateTicketComponent } from './generate-ticket/generate-ticket.component';
 import { BookingService } from './services/bookingservice';
+import { AddPassengerComponent } from './add-passenger/add-passenger.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     BookingComponent,
-    GenerateTicketComponent
+    GenerateTicketComponent,
+    AddPassengerComponent
   ],
   imports: [
     BrowserModule,

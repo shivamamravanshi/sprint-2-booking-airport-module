@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Booking } from '../model/booking';
 import { Observable } from 'rxjs';
 import { Airport } from '../model/airport';
+import { FligtDetails } from '../model/flightDetails';
 
 @Injectable()
 export class BookingService{
@@ -28,6 +29,12 @@ export class BookingService{
     fetchAllAirports():Observable<Airport[]>{
         let url=this.baseBookingUrl+"/airports";
         let observable:Observable<Airport[]> = this.client.get<Airport[]>(url);
+        return observable;
+    }
+
+    fetchSearchedFlights(source:String,destination:String,date:String):Observable<FligtDetails[]>{
+        let url = this.baseBookingUrl+"/flightsearch/"+source+"/"+destination+"/"+date;
+        let observable:Observable<FligtDetails[]> = this.client.get<FligtDetails[]>(url);
         return observable;
     }
 

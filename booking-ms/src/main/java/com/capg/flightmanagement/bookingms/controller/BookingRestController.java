@@ -17,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.validation.ConstraintViolationException;
 import javax.validation.Valid;
+import java.lang.reflect.Array;
 import java.math.BigInteger;
 import java.time.LocalDate;
 
@@ -172,6 +173,56 @@ public class BookingRestController {
         //flightScheduleDto.setArrivalTime(LocalTime.of(20,30));
         //flightScheduleDto.setDepartureTime(LocalTime.of(21,00));
         return flightScheduleDto;
+    }
+
+    @GetMapping("/flightsearch/{source}/{destination}/{date}")
+    public ResponseEntity<FlightAndScheduleInfoDto[]> fetchSearchedFlights(@PathVariable("source") String src,
+                                                 @PathVariable("destination") String destination,@PathVariable("date")String date){
+        FlightAndScheduleInfoDto[] flights = fetchFlights(src,destination,date);
+        ResponseEntity<FlightAndScheduleInfoDto[]> response = new ResponseEntity<>(flights,HttpStatus.OK);
+        return response;
+    }
+
+    private FlightAndScheduleInfoDto[] fetchFlights(String source,String destination, String date){
+        FlightAndScheduleInfoDto[] flights = new FlightAndScheduleInfoDto[4];
+        FlightAndScheduleInfoDto flight = new FlightAndScheduleInfoDto();
+        flight.setFlightNumber(new BigInteger("1100"));
+        flight.setArrivalTime("22:30");
+        flight.setDepartureTime("23:30");
+        flight.setCarrierName("Indigo");
+        flight.setFlightModel("AirBus101");
+        flight.setSeatCost(3000);
+
+        flights[0] = flight;
+
+        flight = new FlightAndScheduleInfoDto();
+        flight.setFlightNumber(new BigInteger("1111"));
+        flight.setArrivalTime("20:30");
+        flight.setDepartureTime("21:30");
+        flight.setCarrierName("AirIndia");
+        flight.setFlightModel("AirBus101");
+        flight.setSeatCost(5000);
+
+        flights[1] = flight;
+
+        flight.setFlightNumber(new BigInteger("7373"));
+        flight.setArrivalTime("18:30");
+        flight.setDepartureTime("19:30");
+        flight.setCarrierName("Indigo");
+        flight.setFlightModel("AirBus101");
+        flight.setSeatCost(7000);
+
+        flights[2] = flight;
+
+        flight.setFlightNumber(new BigInteger("2311"));
+        flight.setArrivalTime("20:00");
+        flight.setDepartureTime("21:00");
+        flight.setCarrierName("Spice Jet");
+        flight.setFlightModel("Boeing101");
+        flight.setSeatCost(30000);
+
+        flights[3] = flight;
+        return flights;
     }
 
     /***

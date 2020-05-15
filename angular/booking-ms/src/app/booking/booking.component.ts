@@ -24,7 +24,7 @@ export class BookingComponent implements OnInit {
   }
   
   addedBooking:Booking=null;
-
+/*
   createBooking(myForm:any){
     let bookingDetails=myForm.value;//here just fetching value of formgroup
     let src = bookingDetails.source;
@@ -50,6 +50,25 @@ export class BookingComponent implements OnInit {
     //this.bookings.push(booking);
     this.flagShowFlights=true;
   }
+*/
+  searchFlights(myForm:any){
+    let flightDetails = myForm.value;
+    let src = flightDetails.source;
+    let destination = flightDetails.destination;
+    let bookingDate = flightDetails.bookingDate;
+
+    let observable:Observable<FligtDetails[]> = this.service.fetchSearchedFlights(src,destination,bookingDate);
+    
+    observable.subscribe(
+      flightList=>{
+        this.flights=flightList;
+        console.log("inside success callback ="+this.flights.length);
+      },
+      err=>console.log("Error "+err)
+    );
+    
+    this.flagShowFlights=true;
+  }
 
   airports:Airport[] = [];
 
@@ -58,13 +77,7 @@ export class BookingComponent implements OnInit {
   
   flagShowFlights:boolean=false;  
 
-  flights = [
-    new FligtDetails(1111,"AirIndia","AirBus101","20:30","21:30",30000),
-    new FligtDetails(1100,"AirIndia","AirBus101","19:30","20:30",31000),
-    new FligtDetails(2211,"AirIndia","AirBus101","00:30","01:30",20000)
-  ]
-
-  
+  flights = [] = [];
 
   constructor(service:BookingService) {
       this.service=service;
