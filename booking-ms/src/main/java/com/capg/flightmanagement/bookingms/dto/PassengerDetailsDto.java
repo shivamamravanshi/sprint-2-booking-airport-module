@@ -2,6 +2,9 @@ package com.capg.flightmanagement.bookingms.dto;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.Random;
@@ -13,9 +16,13 @@ import java.util.UUID;
  * This class is use to transfer the Passenger Details
  */
 public class PassengerDetailsDto {
+
     private BigInteger pnrNumber;
     private String passengerName;
+    @Min(10)
+    @Max(99)
     private Integer passengerAge;
+
     private BigInteger passengerUIN;
     private String gender;
 

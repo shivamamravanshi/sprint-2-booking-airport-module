@@ -1,6 +1,7 @@
 package com.capg.flightmanagement.bookingms.services;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.*;
 
 import com.capg.flightmanagement.bookingms.dao.*;
@@ -8,6 +9,7 @@ import com.capg.flightmanagement.bookingms.entities.Booking;
 
 import com.capg.flightmanagement.bookingms.exceptions.BookingNotFoundException;
 import com.capg.flightmanagement.bookingms.exceptions.InvalidArgumentException;
+import com.capg.flightmanagement.bookingms.exceptions.InvalidBookingDateException;
 import com.capg.flightmanagement.bookingms.exceptions.InvalidBookingIdException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,6 +121,9 @@ public class BookingServiceImpl implements IBookingService {
      */
     @Override
     public void validateBooking(Booking booking) {
+        if(booking.getBookingDate().isBefore(LocalDate.now())){
+            throw new InvalidBookingDateException("Booking date cannot be past date");
+        }
 
     }
 

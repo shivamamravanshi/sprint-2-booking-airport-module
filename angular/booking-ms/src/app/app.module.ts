@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BookingComponent } from './booking/booking.component';
 import { GenerateTicketComponent } from './generate-ticket/generate-ticket.component';
+import { BookingService } from './services/bookingservice';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,7 @@ import { GenerateTicketComponent } from './generate-ticket/generate-ticket.compo
     FormsModule,
     HttpClientModule
   ],
-  providers: [],
+  providers: [BookingService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import java.math.BigInteger;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,13 +48,16 @@ public class BookingRestController {
     private String passengerServiceBaseUrl;
 */
 
+    @Value("${airportService.baseUrl}")
+    private String airportServiceBaseUrl;
+
     /***
      * create Booking if new req
      * @param bookingRequestDto
      * @return
      */
     @PostMapping("/new")
-    public ResponseEntity<BookingDetailsDto> createBookingRequest(@RequestBody BookingRequestDto bookingRequestDto){
+    public ResponseEntity<BookingDetailsDto> createBookingRequest(@RequestBody @Valid BookingRequestDto bookingRequestDto){
         BookingDetailsDto bookingDetailsDto = convertToResponseDto(bookingRequestDto);
         Booking booking = new Booking();
 
@@ -70,6 +73,7 @@ public class BookingRestController {
 
         booking.setPassengersUINList(passengerUINList);
         booking.setNoOfPassenger(passengerUINList.size());
+        bookingService.validateBooking(booking);
         booking = bookingService.addBooking(booking);
         acknowledgeBooking(booking);
         requestPassengerStore(bookingDetailsDto.getPassengerList());
@@ -220,6 +224,19 @@ public class BookingRestController {
      * @param bookingId
      * @return response as true or false
      */
+
+    /***
+     * fetch all airports from airport service url
+     * @return
+     */
+    @GetMapping("/airports")
+    public ResponseEntity<AirportDetailsDto[]> fetchAllAirports(){
+        String url = airportServiceBaseUrl;
+        AirportDetailsDto[] airports  = restTemplate.getForObject(url,AirportDetailsDto[].class);
+        ResponseEntity<AirportDetailsDto[]> response = new ResponseEntity<>(airports,HttpStatus.OK);
+        return response;
+    }
+
     @DeleteMapping("/delete/{bookingId}")
     public ResponseEntity<Boolean> deleteBookingById(@PathVariable("bookingId") BigInteger bookingId) {
         Booking booking = bookingService.viewBooking(bookingId);
@@ -241,7 +258,7 @@ public class BookingRestController {
      */
     private void acknowledgeCancelBooking(Booking booking){
 /*
-        String url = flightScheduleServiceBaseUrl+"/canceled";
+        String url = flightScheduleServiceBaseUrl+"/cancelbooking";
         restTemplate.put(url,booking);
 */
     }
@@ -252,7 +269,7 @@ public class BookingRestController {
      */
     private void cancelRequestPassengerStore(List<BigInteger> passengerUINList){
 /*
-        String url = passengerServiceBaseUrl+"/canceled";
+        String url = passengerServiceBaseUrl+"/remove";
         restTemplate.put(url,passengerUINList);
 */
     }
