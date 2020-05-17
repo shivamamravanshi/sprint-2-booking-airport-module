@@ -15,7 +15,7 @@ public class BookingRequestDto {
     private BigInteger userId;
 
     private List<PassengerDetailsDto> passengerList;
-    private double ticketCost;
+    private int ticketCost;
     private BigInteger flightNumber;
     private int numberOfPassengers;
     private String billingAddress;
@@ -24,6 +24,33 @@ public class BookingRequestDto {
     private String bookingDate;
     private String source;
     private String destination;
+    private String arrivalTime;
+    private String departureTime;
+    private BigInteger contactNumber;
+
+    public String getArrivalTime() {
+        return arrivalTime;
+    }
+
+    public void setArrivalTime(String arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
+
+    public String getDepartureTime() {
+        return departureTime;
+    }
+
+    public void setDepartureTime(String departureTime) {
+        this.departureTime = departureTime;
+    }
+
+    public BigInteger getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(BigInteger contactNumber) {
+        this.contactNumber = contactNumber;
+    }
 
     public String getBillingAddress() {
         return billingAddress;
@@ -73,11 +100,11 @@ public class BookingRequestDto {
         this.passengerList = passengerList;
     }
 
-    public double getTicketCost() {
+    public int getTicketCost() {
         return ticketCost;
     }
 
-    public void setTicketCost(double ticketCost) {
+    public void setTicketCost(int ticketCost) {
         this.ticketCost = ticketCost;
     }
 

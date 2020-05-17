@@ -1,60 +1,53 @@
-
 <div class="jumbotron">
 
-<!--bookingForm is the template local variable we are asking it to hold
+    <!--bookingForm is the template local variable we are asking it to hold
     formgroup -->
-<form class="text-center border border-light p-5" #bookingForm="ngForm" (ngSubmit)=searchFlights(bookingForm)>
-        <h1><p class="h4 mb-4">Booking International and Domestic Flights:</p></h1>
+    <form class="text-center border border-light p-5" #bookingForm="ngForm" (ngSubmit)=searchFlights(bookingForm)>
+        <h1>
+            <p class="h4 mb-4">Booking International and Domestic Flights:</p>
+        </h1>
 
-    <div>  
-        <select class="browser-default custom-select mb-4" [ngModel]="srcAirport" name="source">
-            <option [ngValue]="undefined" disabled>Select airport</option>
+        <div>
+            <select class="browser-default custom-select mb-4" [ngModel]="srcAirport" name="source">
+                <option [ngValue]="undefined" disabled>Select airport</option>
 
-        <option *ngFor="let airport of airports" [value]="airport.airportCode" >
-            {{airport.airportName}}
-        </option>
+                <option *ngFor="let airport of airports" [value]="airport.airportCode">
+                    {{airport.airportName}}
+                </option>
 
-        </select>
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            </select>
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 
-    <select class="browser-default custom-select mb-4" [ngModel]="destAirport" name="destination">
-            <option [ngValue]="undefined" disabled>Select airport</option>
-    
-            <option *ngFor="let airport of airports" [value]="airport.airportCode" >
-                {{airport.airportName}}
-            </option>
-    
-        </select>
-        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            
-     <input type="date" name="bookingDate" placeholder="Booking Date">  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-        <br>
-        <button class="btn btn-success"  type="submit" name="search" 
-            style="margin-top:10px;" >Search</button>
-    </div>
-    
-</form>
+            <select class="browser-default custom-select mb-4" [ngModel]="destAirport" name="destination">
+                <option [ngValue]="undefined" disabled>Select airport</option>
 
+                <option *ngFor="let airport of airports" [value]="airport.airportCode">
+                    {{airport.airportName}}
+                </option>
 
+            </select>
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+
+            <input type="date" name="bookingDate" placeholder="Booking Date"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp;
+            <br>
+            <button class="btn btn-success" type="submit" name="search" style="margin-top:10px;">Search</button>
+        </div>
+
+    </form>
 
 
 </div>
-
-<!--
-<div *ngFor="let booking of bookings">
-{{booking.userId}} {{booking.source}} {{booking.destination}}
-</div>
--->
 
 <div class="text-center border border-light p-5" *ngIf="flagShowFlights">
     <p class="h4 mb-4">Available Flights:</p>
-    <div  class="jumbotron" *ngFor="let flight of flights">
+    <div class="jumbotron" *ngFor="let flight of flights">
         Flight Number: {{flight.flightNumber}}<br>
         Carrier Name: {{flight.carrierName}} <br>
         Flight Model: {{flight.flightModel}} <br>
-        Departure: {{flight.departure}} <br>
-        Arrival: {{flight.arrival}} <br>
+        Departure: {{flight.departureTime}} <br>
+        Arrival: {{flight.arrivalTime}} <br>
         Cost/Seat: {{flight.seatCost}} <br>
-        <button class="btn btn-success" name="book">Book</button>
+        <button class="btn btn-success" name="book" routerLink="../add-passenger">Book Now</button>
     </div>
 </div>

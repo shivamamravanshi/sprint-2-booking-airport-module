@@ -1,1 +1,57 @@
-<p>generate-ticket works!</p>
+<div *ngIf="ticketInfo!=null">
+
+
+    <div class="jumbotron">
+        <div>
+            <h2>Your Booking has been Confirmed: </h2>
+            <br>
+            <br>
+            <div>
+                Booking Id : {{ticketInfo.bookingId}}
+            </div>
+            <br>
+            <div>
+                <h6>Flight Details: </h6>
+                Flight Number = {{ticketInfo.flightNumber}} <br>
+                Source = {{ticketInfo.source}} <br>
+                Destination = {{ticketInfo.destination}} <br>
+                Arrival Time = {{ticketInfo.arrivalTime}} <br>
+                DepartureTime = {{ticketInfo.departureTime}} <br>
+            </div>
+
+            <div>
+                <br>
+                <h6>Passenger Details: </h6>
+                <br>
+                <div class="row card-group">
+                    <div *ngFor="let passenger of passengers; let i=index" [attr.data-index]="i" class="col-4 card">
+                        <h6>Passenger {{i+1}}:</h6>
+                        PNR = {{passenger.pnrNumber}} <br>
+                        Passenger Name = {{passenger.passengerName}} <br>
+                        Passenger Age = {{passenger.passengerAge}} <br>
+                        Gender = {{passenger.gender}} <br>
+                        Passenger ID = {{passenger.passengerUIN}} <br>
+                        Luggage = {{passenger.luggage}}
+                        <br>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+            <div>
+                <h6>Contact Number :</h6> {{ticketInfo.contactNumber}}
+            </div>
+            <br>
+            <div>
+                <h6>Billing Address: </h6> {{ticketInfo.billingAddress}}
+            </div>
+            <br>
+
+            <button class="btn btn-success" name="downloadTicket">Download E-Ticket</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button class="btn btn-success" name="home" routerLink="../">Home</button>
+
+        </div>
+    </div>
+
+</div>

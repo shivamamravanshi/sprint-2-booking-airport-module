@@ -1,6 +1,7 @@
 import { Passenger } from './passenger';
 
-export class Booking {
+export class TicketInfo {
+    bookingId: Number;
     userId: Number;
     source: String;
     destination: String;
@@ -14,7 +15,8 @@ export class Booking {
     billingAddress: String;
     contactNumber: Number
 
-    constructor(userId: Number, source: String, destination: String, arrivalTime: String, departureTime: String, bookingDate: String, passengers: Passenger[], ticketCost: Number,
+    constructor(bookingId: Number, userId: Number, source: String, destination: String, arrivalTime: String,
+        departureTime: String, bookingDate: String, passengerList: Passenger[], ticketCost: Number,
         flightNumber: Number, numberOfPassengers: Number, billingAddress: String, contactNumber: Number) {
         this.userId = userId;
         this.source = source;
@@ -22,11 +24,12 @@ export class Booking {
         this.arrivalTime = arrivalTime;
         this.departureTime = departureTime;
         this.bookingDate = bookingDate;
-        this.passengerList = passengers;
+        this.passengerList = passengerList;
         this.ticketCost = ticketCost;
         this.flightNumber = flightNumber;
         this.numberOfPassengers = numberOfPassengers;
         this.billingAddress = billingAddress;
         this.contactNumber = contactNumber;
+        this.bookingId = bookingId;
     }
 }

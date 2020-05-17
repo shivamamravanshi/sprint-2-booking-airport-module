@@ -1,8 +1,6 @@
 package com.capg.flightmanagement.bookingms.dto;
 
 import java.math.BigInteger;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 /***
@@ -11,20 +9,40 @@ import java.util.List;
  * This class is use to transfer the booking details
  */
 public class BookingDetailsDto {
+    private BigInteger bookingId;
     //flight Details
     private BigInteger flightNumber;
     private String source;
     private String destination;
     private String  arrivalTime;
     private String  departureTime;
+    private String bookingDate;
+    private int ticketCost;
+
 
     //passengers Detalis
     List<PassengerDetailsDto> passengerList;
-
+    private int numberOfPassengers;
     //userContactDetails
-    private BigInteger userPhone;
+    private BigInteger contactNumber;
     private BigInteger userId;
     private String billingAddress;
+
+    public BigInteger getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(BigInteger bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    public String getBookingDate() {
+        return bookingDate;
+    }
+
+    public void setBookingDate(String bookingDate) {
+        this.bookingDate = bookingDate;
+    }
 
     public BigInteger getUserId() {
         return userId;
@@ -40,6 +58,14 @@ public class BookingDetailsDto {
 
     public void setFlightNumber(BigInteger flightNumber) {
         this.flightNumber = flightNumber;
+    }
+
+    public int getTicketCost() {
+        return ticketCost;
+    }
+
+    public void setTicketCost(int ticketCost) {
+        this.ticketCost = ticketCost;
     }
 
     public String getSource() {
@@ -82,12 +108,20 @@ public class BookingDetailsDto {
         this.passengerList = passengerList;
     }
 
-    public BigInteger getUserPhone() {
-        return userPhone;
+    public int getNumberOfPassengers() {
+        return numberOfPassengers;
     }
 
-    public void setUserPhone(BigInteger userPhone) {
-        this.userPhone = userPhone;
+    public void setNumberOfPassengers(int numberOfPassengers) {
+        this.numberOfPassengers = numberOfPassengers;
+    }
+
+    public BigInteger getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(BigInteger contactNumber) {
+        this.contactNumber = contactNumber;
     }
 
     public String getBillingAddress() {

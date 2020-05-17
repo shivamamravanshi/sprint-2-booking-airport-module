@@ -25,6 +25,7 @@ public class PassengerDetailsDto {
 
     private BigInteger passengerUIN;
     private String gender;
+    private int luggage;
 
     private static Long generatedNumber = 1000000000L;
     public PassengerDetailsDto(){
@@ -78,5 +79,13 @@ public class PassengerDetailsDto {
 
     public void setPassengerUIN(BigInteger passengerUIN) {
         this.passengerUIN = passengerUIN;
+    }
+
+    public int getLuggage() {
+        return luggage;
+    }
+
+    public void setLuggage(int luggage) {
+        this.luggage = luggage;
     }
 }
