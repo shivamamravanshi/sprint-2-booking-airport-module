@@ -5,6 +5,7 @@ import { Booking } from '../model/booking';
 import { BookingService } from '../services/bookingservice';
 import { Observable } from 'rxjs';
 import { TicketInfo } from '../model/ticketInfo';
+import { FligtDetails } from '../model/flightDetails';
 @Component({
   selector: 'app-add-passenger',
   templateUrl: './add-passenger.component.html',
@@ -21,39 +22,35 @@ export class AddPassengerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe(
-      (params: ParamMap) => {
-        let source: String = params.get("source");
-        let destination: String = params.get("destination");
-        let bookingDate = params.get("date");
-        let arrivalTime = params.get("arrivalTime");
-        let departureTime = params.get("departureTime");
-        this.bookingDate = bookingDate;
-        this.source = source;
-        this.destination = destination;
-        this.arrivalTime = arrivalTime;
-        this.departureTime = departureTime;
-      }
-    );
+    this.service.getFlightInfo().subscribe(data => {
+      this.flightInfo = data;
+    },
+      err => {
+        console.log("Error" + err);
+      });
+
+    this.service.getBookingInfo().subscribe(data => {
+      this.source = data.source;
+      this.destination = data.destination;
+      this.bookingDate = data.bookingDate;
+    },
+      err => {
+        console.log("Error" + err);
+      })
   }
+
+  flightInfo: FligtDetails;
+  bookingDate: String;
+  source: String;
+  destination: String;
 
   getLoginUserId() {
     return 10;
   }
 
-  source: String = null;
-  destination: String = null;
-  arrivalTime: String = null;
-  departureTime: String = null;
-  bookingDate = null;
-  flightNumber: Number = null;
-  ticketCost: Number;
-
-
 
   ticketInfo: TicketInfo = null;
   passengers: Passenger[] = [];
-  returnPassengers: Passenger[] = []
 
   addPassenger(passengerForm: any) {
     let details = passengerForm.value;
@@ -97,7 +94,7 @@ export class AddPassengerComponent implements OnInit {
     let passengerGender4 = details.gender4;
     let luggage4 = details.luggage4;
 
-    if (passengerUIN4 !== null && passengerName4 == '' && passengerGender4 !== '' && passengerAge4 !== null && luggage4 !== null) {
+    if (passengerUIN4 !== null && passengerName4 !== '' && passengerGender4 !== '' && passengerAge4 !== null && luggage4 !== null) {
       passenger = new Passenger(null, passengerUIN4, passengerName4, passengerAge4, passengerGender4, luggage4);
       passengerList.push(passenger);
     }
@@ -111,20 +108,15 @@ export class AddPassengerComponent implements OnInit {
   }
 
   createBooking(passengerList: Passenger[], billingAddress: String, contactNumber: Number) {
-    //let flightNumber:Number = this.flightNumber;
-    //let source:String = this.source;
-    //let destination:String = this.destination;
-    //let arrivalTime=this.arrivalTime;
-    //let departureTime = this.departureTime;
-    //let bookingDate = this.bookingDate;
-    let flightNumber: Number = 1212;
-    let source: String = "Mumbai";
-    let destination: String = "Delhi";
-    let arrivalTime: String = "20:30";
-    let departureTime = "21:30";
-    let bookingDate = "20-09-2020";
+    let flightNumber = this.flightInfo.flightNumber;
+    let departureTime = this.flightInfo.departureTime;
+    let arrivalTime = this.flightInfo.arrivalTime;
+    let ticketCost = this.flightInfo.seatCost;
+    let bookingDate = this.bookingDate;
+    let source: String = this.source;
+    let destination: String = this.destination;
     let userID = this.getLoginUserId();
-    let ticketCost = 7000;
+
     let numberOfpassenger = passengerList.length;
 
     let booking: Booking = new Booking(userID, source, destination, arrivalTime, departureTime, bookingDate, passengerList, ticketCost, flightNumber,
@@ -135,11 +127,11 @@ export class AddPassengerComponent implements OnInit {
     let observable: Observable<TicketInfo> = this.service.createBooking(booking);
     observable.subscribe((ticketInfo: TicketInfo) => {
       this.ticketInfo = ticketInfo;
-      this.returnPassengers = ticketInfo.passengerList;
+      this.passengers = ticketInfo.passengerList;
       this.service.cacheTicketInfo(ticketInfo);
     },
       err => {
-        console.log("Error" + err);
+        console.log("Error" + err.Error);
       });
 
   }

@@ -6,7 +6,7 @@ import { FormBuilder } from '@angular/forms';
 import { FligtDetails } from '../model/flightDetails';
 import { BookingService } from '../services/bookingservice';
 import { Observable } from 'rxjs';
-import { EventEmitter } from 'protractor';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -41,61 +41,25 @@ export class BookingComponent implements OnInit {
   destAirport: string = undefined;
   flagShowFlights: boolean = false;
 
+  source: String;
+  destination: String;
+  bookingDate: String;
+  BOOKINGDATE: Date;
 
-  //bookings:Booking[]=[];
-  //userID will come from service after login, let's fake it
-  /*  getLoginUserId(){
-      return 10; 
-    }
-  */
-  //addedBooking:Booking=null;
-  /*
-    createBooking(myForm:any){
-      let bookingDetails=myForm.value;//here just fetching value of formgroup
-      let src = bookingDetails.source;
-      let destination = bookingDetails.destination;
-      let bookingDate = bookingDetails.bookingDate;
-      let userID = this.getLoginUserId();
-      let passengers:Passenger[] = bookingDetails.passengers;
-      let ticketcost = bookingDetails.ticketcost;
-      let flightNumber = bookingDetails.flightNumber;
-      let numberOfpassenger = bookingDetails.numberOfpassenger;
-      let billingAddress = bookingDetails.billingAddress;
-      this.addedBooking = new Booking(userID,src,destination,bookingDate,passengers,ticketcost,flightNumber,numberOfpassenger,billingAddress);
-      
-      let result = this.service.createBooking(this.addedBooking);
-      result.subscribe((booking:Booking)=>{
-          this.addedBooking=booking;
-      },
-      err=>{
-        console.log("Error"+err);
-      });
-      myForm.reset();
-      this.flagShowFlights=true;
-      //this.bookings.push(booking);
-      this.flagShowFlights=true;
-    }
-  */
-  /*  @Output() sendDataToPassengerEvent = new EventEmitter<object>();
-  
-    passDataToPassenger(source:String,destination:String,date:Date,arrivalTime:String,departureTime:String){
-        this.sendDataToPassengerEvent.emit({
-        source:String,
-        destination:String,
-        date:Date,
-        arrivalTime:String,
-        departureTime:String
-      });
-    }
-  */
+
 
   searchFlights(myForm: any) {
-    let flightDetails = myForm.value;
-    let src = flightDetails.source;
-    let destination = flightDetails.destination;
-    let bookingDate = flightDetails.bookingDate;
 
-    let observable: Observable<FligtDetails[]> = this.service.fetchSearchedFlights(src, destination, bookingDate);
+    let flightDetails = myForm.value;
+    this.bookingDate = flightDetails.bookingDate;
+    this.source = flightDetails.source;
+    this.destination = flightDetails.destination;
+    let stringDate: String = new DatePipe('en-US').transform(this.bookingDate, 'dd-MM-yyyy');
+    console.log(stringDate);
+
+    this.service.cacheBookingInfo(this.source, this.destination, "20-02-2021");
+
+    let observable: Observable<FligtDetails[]> = this.service.fetchSearchedFlights(this.source, this.destination, stringDate);
 
     observable.subscribe(
       flightList => {
@@ -108,8 +72,8 @@ export class BookingComponent implements OnInit {
     this.flagShowFlights = true;
   }
 
-
-
-
+  onClick(flight: FligtDetails) {
+    this.service.cacheFlightInfo(flight);
+  }
 
 }

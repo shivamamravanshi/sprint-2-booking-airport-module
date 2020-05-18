@@ -142,15 +142,14 @@
             &nbsp; &nbsp; &nbsp; &nbsp;
 
             <div>
-                <input type="text" class="form-control" name="gender2" ngModel #gender2=ngModel placeholder="Gender"
-                    required>
+                <input type="text" class="form-control" name="gender2" ngModel #gender2=ngModel placeholder="Gender">
 
             </div>
             &nbsp; &nbsp; &nbsp; &nbsp;
 
             <div>
                 <input type="number" class="form-control" name="luggage2" maxlength="15" ngModel #luggage2=ngModel
-                    placeholder="Luggage" required>
+                    placeholder="Luggage">
             </div>
         </div>
 
@@ -201,15 +200,14 @@
             &nbsp; &nbsp; &nbsp; &nbsp;
 
             <div>
-                <input type="text" class="form-control" name="gender3" ngModel #gender3=ngModel placeholder="Gender"
-                    required>
+                <input type="text" class="form-control" name="gender3" ngModel #gender3=ngModel placeholder="Gender">
 
             </div>
             &nbsp; &nbsp; &nbsp; &nbsp;
 
             <div>
                 <input type="number" class="form-control" name="luggage3" maxlength="15" ngModel #luggage3=ngModel
-                    placeholder="Luggage" required>
+                    placeholder="Luggage">
             </div>
         </div>
 
@@ -260,15 +258,14 @@
             &nbsp; &nbsp; &nbsp; &nbsp;
 
             <div>
-                <input type="text" class="form-control" name="gender4" ngModel #gender4=ngModel placeholder="Gender"
-                    required>
+                <input type="text" class="form-control" name="gender4" ngModel #gender4=ngModel placeholder="Gender">
 
             </div>
             &nbsp; &nbsp; &nbsp; &nbsp;
 
             <div>
-                <input type="number" class="form-control" name="luggage4" maxlength="15" ngModel #luggage4=ngModel
-                    placeholder="Luggage" required>
+                <input type="number" class="form-control" name="luggage4" max=15 ngModel #luggage4=ngModel
+                    placeholder="Luggage">
             </div>
         </div>
 
@@ -276,51 +273,125 @@
         <div class="form-group">
             <div class="jumbotron">
                 <input type="text" size="60" class="form-control" name="billingAddress" ngModel #billingAddress=ngModel
-                    placeholder="Address">
+                    placeholder="Address" required>
+
+                <div *ngIf="billingAddress.invalid" class="alert alert-danger">
+
+                    <div *ngIf="billingAddress.errors.required">
+                        Billing Address is required.
+                    </div>
+
+                </div>
+
                 &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;
 
                 <input type="number" size="40" class="form-control" name="contactNumber" ngModel #contactNumber=ngModel
-                    placeholder="Contact Number">
+                    placeholder="Contact Number" required>
+
+                <div *ngIf="contactNumber.invalid" class="alert alert-danger">
+
+                    <div *ngIf="contactNumber.errors.required">
+                        Contact Number is required.
+                    </div>
+                    <div *ngIf="contactNumber.errors.minlength">
+                        Contact Number must be 10 digit long.
+                    </div>
+                    <div *ngIf="contactNumber.errors.maxlength">
+                        Contact Number can not be grater than 10 digit.
+                    </div>
+
+                </div>
 
             </div>
 
             <div class="form-check">
                 <label>
-                    <input class="form-check-input" type="checkbox" value="" required>
+                    <input class="form-check-input" name="termsAndConditions" type="checkbox" ngModel
+                        #termsAndConditions=ngModel required>
                     I Agree to the terms and condition
                 </label>
             </div>
             &nbsp; &nbsp; &nbsp; &nbsp;
             <div>
-                <button class="btn btn-success" type="submit" routerLink="../generate-ticket">Confirm Booking</button>
+                <button class="btn btn-success" [disabled]="!passengerForm.form.valid" type="submit">Confirm
+                    Booking</button>
             </div>
         </div>
     </form>
 
     <div *ngIf="ticketInfo!=null">
-
-        Booking Id ={{ticketInfo.bookingId}} <br>
-        User ID = {{ticketInfo.userId}} <br>
-        Source = {{ticketInfo.source}} <br>
-        Destination = {{ticketInfo.destination}} <br>
-        Booking Date = {{ticketInfo.bookingDate}} <br>
-        ticketCost = {{ticketInfo.ticketCost}} <br>
-        flightNumber = {{ticketInfo.flightNumber}} <br>
-        arrival Time = {{ticketInfo.arrivalTime}} <br>
-        departureTime = {{ticketInfo.departureTime}} <br>
-        billingAddress = {{ticketInfo.billingAddress}} <br>
-        contactNumber = {{ticketInfo.contactNumber}} <br>
-        Number of passenger = {{ticketInfo.numberOfPassengers}}
-
-        <div *ngFor="let passenger of returnPassengers">
-            PNR = {{passenger.pnrNumber}} <br>
-            Passenger Name = {{passenger.passengerName}}
-            Passenger Age = {{passenger.passengerAge}}
-            Gender = {{passenger.genger}}
-            Luggage = {{passenger.luggage}}
-            Passenger ID = {{passenger.passengerUIN}}
+        <div class="jumbotron">
+            <h6>Your Booking has been Confirmed:</h6>
+            <br>
+            Booking Id : {{ticketInfo.bookingId}}
+            <br>
+            <br>
+            <button class="btn btn-success" type="button" routerLink="../generate-ticket">Generate E-Ticket</button>
         </div>
 
     </div>
+
+
+
+
+
+
+    <!-- <div *ngIf="ticketInfo!=null">
+
+
+        <div class="jumbotron">
+            <div>
+                <h2>Your Booking has been Confirmed: </h2>
+                <br>
+                <br>
+                <div>
+                    Booking Id : {{ticketInfo.bookingId}}
+                </div>
+                <br>
+                <div>
+                    <h6>Flight Details: </h6>
+                    Flight Number = {{ticketInfo.flightNumber}} <br>
+                    Source = {{ticketInfo.source}} <br>
+                    Destination = {{ticketInfo.destination}} <br>
+                    Arrival Time = {{ticketInfo.arrivalTime}} <br>
+                    DepartureTime = {{ticketInfo.departureTime}} <br>
+                </div>
+
+                <div>
+                    <br>
+                    <h6>Passenger Details: </h6>
+                    <br>
+                    <div class="row card-group">
+                        <div *ngFor="let passenger of passengers; let i=index" [attr.data-index]="i" class="col-4 card">
+                            <h6>Passenger {{i+1}}:</h6>
+                            PNR = {{passenger.pnrNumber}} <br>
+                            Passenger Name = {{passenger.passengerName}} <br>
+                            Passenger Age = {{passenger.passengerAge}} <br>
+                            Gender = {{passenger.gender}} <br>
+                            Passenger ID = {{passenger.passengerUIN}} <br>
+                            Luggage = {{passenger.luggage}}
+                            <br>
+                        </div>
+                    </div>
+                </div>
+
+                <br>
+                <div>
+                    <h6>Contact Number :</h6> {{ticketInfo.contactNumber}}
+                </div>
+                <br>
+                <div>
+                    <h6>Billing Address: </h6> {{ticketInfo.billingAddress}}
+                </div>
+                <br>
+
+                <button class="btn btn-success" name="downloadTicket">Download E-Ticket</button>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-success" name="home" routerLink="../">Home</button>
+
+            </div>
+        </div>
+
+    </div> -->
 
 </div>

@@ -1,7 +1,5 @@
 <div class="jumbotron">
 
-    <!--bookingForm is the template local variable we are asking it to hold
-    formgroup -->
     <form class="text-center border border-light p-5" #bookingForm="ngForm" (ngSubmit)=searchFlights(bookingForm)>
         <h1>
             <p class="h4 mb-4">Booking International and Domestic Flights:</p>
@@ -28,14 +26,13 @@
             </select>
             &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
 
-            <input type="date" name="bookingDate" placeholder="Booking Date"> &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-            &nbsp; &nbsp;
+            <input type="date" name="bookingDate" placeholder="Booking Date" ngModel #bookingDate="ngModel" required>
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
             <br>
             <button class="btn btn-success" type="submit" name="search" style="margin-top:10px;">Search</button>
         </div>
 
     </form>
-
 
 </div>
 
@@ -48,6 +45,7 @@
         Departure: {{flight.departureTime}} <br>
         Arrival: {{flight.arrivalTime}} <br>
         Cost/Seat: {{flight.seatCost}} <br>
-        <button class="btn btn-success" name="book" routerLink="../add-passenger">Book Now</button>
+        <button class="btn btn-success" name="book" (click)="onClick(flight)" routerLink="../add-passenger">Book
+            Now</button>
     </div>
 </div>

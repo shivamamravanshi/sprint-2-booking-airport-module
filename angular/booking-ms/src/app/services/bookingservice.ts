@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Booking } from '../model/booking';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { Airport } from '../model/airport';
 import { FligtDetails } from '../model/flightDetails';
 import { TicketInfo } from '../model/ticketInfo';
@@ -9,13 +9,19 @@ import { TicketInfo } from '../model/ticketInfo';
 @Injectable()
 export class BookingService {
 
-    ticketInfo: TicketInfo = null;
-
+    ticketInfo: TicketInfo = undefined;
+    baseBookingUrl = "http://localhost:8991/bookings";
+    ticketInfoSubject = new BehaviorSubject(null);
+    flightInfoSubject = new BehaviorSubject(null);
+    bookingInfoSubject = new BehaviorSubject(null);
     client: HttpClient;
+
+
+
     constructor(client: HttpClient) {
         this.client = client;
     }
-    baseBookingUrl = "http://localhost:8991/bookings";
+
 
     createBooking(booking: Booking): Observable<TicketInfo> {
         let url = this.baseBookingUrl + "/new";
@@ -58,11 +64,31 @@ export class BookingService {
     }
 
     cacheTicketInfo(ticketInfo: TicketInfo) {
-        this.ticketInfo = ticketInfo;
+        this.ticketInfoSubject.next(ticketInfo);
     }
 
     getTicketInfo() {
-        return this.ticketInfo;
+        return this.ticketInfoSubject.asObservable();
+    }
+
+    cacheFlightInfo(flight: FligtDetails) {
+        this.flightInfoSubject.next(flight);
+    }
+
+    getFlightInfo() {
+        return this.flightInfoSubject.asObservable();
+    }
+
+    cacheBookingInfo(source: String, destination: String, bookingDate: String) {
+        this.bookingInfoSubject.next({
+            source,
+            destination,
+            bookingDate
+        });
+    }
+
+    getBookingInfo() {
+        return this.bookingInfoSubject.asObservable();
     }
 
 }
