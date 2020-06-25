@@ -138,7 +138,7 @@ public class BookingRestController {
         bookingDetailsDto.setDestination(bookingRequestDto.getDestination());
         bookingDetailsDto.setBillingAddress(bookingRequestDto.getBillingAddress());
         bookingDetailsDto.setNumberOfPassengers(bookingRequestDto.getNumberOfPassengers());
-        //schedule
+
         FlightScheduleDto flightScheduleDto = getScheduleFlightDetails(bookingRequestDto.getFlightNumber());
 
         if (bookingRequestDto.getPassengerList().size() > flightScheduleDto.getAvailableSeat()) {
@@ -191,8 +191,6 @@ public class BookingRestController {
         flightScheduleDto.setFlightNumber(new BigInteger("1111"));
         flightScheduleDto.setArrivalTime("20:30");
         flightScheduleDto.setDepartureTime("21:30");
-        //flightScheduleDto.setArrivalTime(LocalTime.of(20,30));
-        //flightScheduleDto.setDepartureTime(LocalTime.of(21,00));
         return flightScheduleDto;
     }
 

@@ -13,7 +13,7 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 
 /**
- * this is equal to three annotations
+ * @SpringBootApplication is equal to three annotations
  * 1) @Configuration
  * 2)@ComponentScan
  * 3)@EnableAutoConfiguration

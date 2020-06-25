@@ -1,9 +1,30 @@
-<!--
-<app-booking></app-booking>
-<app-add-passenger></app-add-passenger>
--->
-<a href="" routerLink="booking">
-    Book Flight
-</a>
+<nav class="navbar navbar-dark bg-dark">
+    
+    <a class="navbar-brand" href="">Flight Booking</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="" routerLink="booking" (click)="isHome=false">Book Flight</a>
+        </li>
+        
+      </ul>
+      
+    </div>
+
+</nav>
+<div *ngIf="isHome" class="bg" style="padding-bottom: 25%;">
+  <div class="text-center border border-light p-5">
+    <h2>
+      <p class="py-5 text-center">Flight Booking System</p>
+    </h2>
+  </div>
+</div>
 
 <router-outlet></router-outlet>
